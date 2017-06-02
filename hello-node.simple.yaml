@@ -1,0 +1,35 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: hello-node-deployment
+spec:
+  replicas: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: hello-node
+    spec:
+      containers:
+      - name: hello-node
+        image: asia.gcr.io/sungjinhong-study/hello-node:v2
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: 1000Mi
+          limits:
+            memory: 1280Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-node-service
+spec:
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+  selector:
+    app: hello-node
+  type: LoadBalancer
